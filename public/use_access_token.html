@@ -32,10 +32,8 @@
         },
         success: function(response) {
           $.get("/loggedinh", {userinfo : JSON.stringify(response)}, function(data) {
-              console.log('hi');
-              window.location.href = 'http://localhost:8000/endhost';
-            }
-          );
+            window.location.href = 'endh.html#'+data;
+          } );
         }
       })
     }

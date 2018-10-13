@@ -1,12 +1,3 @@
-/**
- * This is an example of a basic node.js script that performs
- * the Authorization Code oAuth2 flow to authenticate against
- * the Spotify Accounts.
- *
- * For more information, read
- * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
- */
-
 var express = require('express'); // Express web server framework
 var fs = require('fs');
 var path = require('path');
@@ -30,18 +21,14 @@ var stateKey = 'spotify_auth_state';
 
 var app = express();
 
-app.use(express.static(__dirname + '/screens'));
-
-app.get('/', function(req, res) {
-  res.sendFile(__dirname+'/screens/main_or.html');
-});
+app.use(express.static(__dirname+'/public'));
 
 app.get('/loggedinh', function(req, res) {
   userinfo = JSON.parse(req.query.userinfo);
+  var roomcode = "";
   fs.readFile('data/listofrooms.txt', function(err, data) {
     if (err) throw err;
     listofrooms = JSON.parse(data);
-    roomcode = "";
     while (roomcode == "" || listofrooms.roomcodes.includes(roomcode)){
       roomcode = "";
       var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -53,7 +40,7 @@ app.get('/loggedinh', function(req, res) {
     console.log(userinfo);
     console.log(JSON.stringify(listofrooms));
     // tag = "user1"+req.query.type;
-    roomdata = {"numusers": 1, "users": {"user1": req.query.userinfo}}
+    roomdata = {"numusers": 1, "users": {"host": req.query.userinfo}}
     fs.writeFile('data/'+roomcode+'.txt', JSON.stringify(roomdata), function (err) {
       if (err) throw err;
       console.log('Saved userinfo!');
@@ -62,10 +49,8 @@ app.get('/loggedinh', function(req, res) {
       if (err) throw err;
       console.log('Saved roomcode!');
     });
+    res.end(roomcode);
   });
-  // res.json({"rc" : roomcode});
-  res.end();
-  // res.sendFile(__dirname+'/screens/endh.html');
 });
 
 // app.get('/loggeding', function(req, res) {
@@ -74,7 +59,7 @@ app.get('/loggedinh', function(req, res) {
 //   fs.readFile('data/listofrooms.txt', function(err, data) {
 //     if (err) throw err;
 //     listofrooms = JSON.parse(data);
-//     if (!listofrooms.roomcodes.includes(inputrc)) res.sendFile(__dirname+'/screens/enter_roomcode.html');
+//     if (!listofrooms.roomcodes.includes(inputrc)) res.sendFile(__dirname+'/public/enter_roomcode.html');
 //     fs.readFile('data/'+inputrc+'.txt', function(err, data1) {
 //       if (err) throw err;
 //       roomuserdata = JSON.parse(data1);
@@ -86,16 +71,12 @@ app.get('/loggedinh', function(req, res) {
 //         console.log('updated data/'+inputrc+'.txt');
 //       });
 //     });
-//   res.sendFile(__dirname+'/screens/loggedin.html');
+//   res.sendFile(__dirname+'/public/loggedin.html');
 // });
 
 app.get('/callback', function(req, res) {
-  res.sendFile(__dirname+'/screens/use_access_token.html');
+  res.sendFile(__dirname+'/public/use_access_token.html');
 });
-
-app.get('/endhost', function(req, res) {
-  res.sendFile(__dirname+'/screens/endh.html');
-})
 
 
 

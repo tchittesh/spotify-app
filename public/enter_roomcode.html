@@ -31,6 +31,7 @@ body {
   <br />
   <form>
     Enter your room code: <input id='rcode-input' type="text" name="rcode"><br>
+    Enter your name: <input id='name-input' type="text" name="username"><br>
     <input id='login-group' type="submit" value="Submit">
   </form>
 </div>
@@ -127,10 +128,6 @@ body {
 
         var client_id = 'c4afbd083ef34b34810c5b3c16a2e08d'; // Your client id
         var redirect_uri = 'http://localhost:8000/callback'; // Your redirect uri
-
-        var state = generateRandomString(16);
-
-        localStorage.setItem(stateKey, state);
         var scope = 'user-read-private user-read-email user-top-read';
 
         var url = 'https://accounts.spotify.com/authorize';
@@ -138,7 +135,6 @@ body {
         url += '&client_id=' + encodeURIComponent(client_id);
         url += '&scope=' + encodeURIComponent(scope);
         url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
-        url += '&state=' + encodeURIComponent(state);
 
         window.location = url;
       }, false);

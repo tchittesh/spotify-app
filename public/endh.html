@@ -29,7 +29,12 @@ body {
 </header>
 <div align=CENTER>
   <br />
-  <text>Safe to close tab now.</text>
+  <text id='text-box'>Safe to close tab now.</text>
 </div>
+<script>
+var roomcode = window.location.hash;
+
+document.getElementById('text-box').innerHTML = "Your room code is "+roomcode.substring(1,);
+</script>
 </body>
 </html>
