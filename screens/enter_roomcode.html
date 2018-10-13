@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+table{background-color:#87CEEB;}
+td,th{border:1px solid #aaa;text-align:left;padding:8px}
+td{background-color:#fff}
+th{background-color:#c4c4c4}
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
+body {
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-position: right top;
+    margin-right: 200px;
+    background-attachment: fixed;
+}
+</style></head>
+<body class="w3-light-grey">
+
+    <header class="w3-container w3-light-blue w3-center w3-margin-top w3-card">
+  <h2><font style="font:115%/1.3 Arial,Helvetica,sans-serif"> Type of Viewer </font></h2>
+</header>
+<div align=CENTER>
+  <br />
+  <form>
+    Enter your room code: <input id='rcode-input' type="text" name="rcode"><br>
+    <input id='login-group' type="submit" value="Submit">
+  </form>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script>
+  (function() {
+
+    var stateKey = 'spotify_auth_state';
+
+    /**
+     * Obtains parameters from the hash of the URL
+     * @return Object
+     */
+    function getHashParams() {
+      var hashParams = {};
+      var e, r = /([^&;=]+)=?([^&;]*)/g,
+          q = window.location.hash.substring(1);
+      while ( e = r.exec(q)) {
+         hashParams[e[1]] = decodeURIComponent(e[2]);
+      }
+      return hashParams;
+    }
+
+    function generateRandomString(length) {
+      var text = '';
+      var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (var i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
+    };
+
+    var params = getHashParams();
+
+    var access_token = params.access_token,
+        state = params.state,
+        storedState = localStorage.getItem(stateKey);
+
+    if (access_token && (state == null || state !== storedState)) {
+      console.log(access_token);
+      console.log(state);
+      console.log(storedState);
+      console.log('There was an error during the authentication');
+    } else {
+      localStorage.removeItem(stateKey);
+      if (access_token) {
+        $.ajax({
+            url: 'https://api.spotify.com/v1/me/top/tracks',
+            headers: {
+              'Authorization': 'Bearer ' + access_token
+            },
+            success: function(response) {
+              //display info
+              console.log(response);
+              $.get(
+                "/loggeding",
+                {rcode_input : document.getElementById("rcode-input").value,
+                  userinfo : JSON.stringify(response)},
+                function(data) {
+                  console.log('successful');
+                  // window.location.href = 'http://localhost:8000/loggedin';
+                }
+              );
+            }
+        });
+        // $.ajax({
+        //     url: 'https://api.spotify.com/v1/me/top/tracks?limit=30',
+        //     headers: {
+        //       'Authorization': 'Bearer ' + access_token
+        //     },
+        //     success: function(response) {
+        //       //display info
+        //       console.log(response);
+        //       $.get(
+        //         "/loggedinh",
+        //         {type:'trackdata',
+        //           userinfo : JSON.stringify(response)},
+        //         function(data) {
+        //           console.log('successful');
+        //           // window.location.href = 'http://localhost:8000/loggedin';
+        //         }
+        //       );
+        //     }
+        // });
+      } else {
+          // render initial screen
+          // $('#login').show();
+          // $('#loggedin').hide();
+      }
+
+      document.getElementById('login-group').addEventListener('click', function() {
+
+        var client_id = 'c4afbd083ef34b34810c5b3c16a2e08d'; // Your client id
+        var redirect_uri = 'http://localhost:8000/callback'; // Your redirect uri
+
+        var state = generateRandomString(16);
+
+        localStorage.setItem(stateKey, state);
+        var scope = 'user-read-private user-read-email user-top-read';
+
+        var url = 'https://accounts.spotify.com/authorize';
+        url += '?response_type=token';
+        url += '&client_id=' + encodeURIComponent(client_id);
+        url += '&scope=' + encodeURIComponent(scope);
+        url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+        url += '&state=' + encodeURIComponent(state);
+
+        window.location = url;
+      }, false);
+    }
+  })();
+</script>
+</body>
+</html>
