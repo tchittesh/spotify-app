@@ -36,7 +36,7 @@ app.get('/loggedinh', function(req, res) {
     console.log(userinfo);
     console.log(JSON.stringify(listofrooms));
     // tag = "user1"+req.query.type;
-    roomdata = {"numusers": 1, "users": {"host": req.query.userinfo}}
+    roomdata = {"numusers": 1, "users": {"host": userinfo}}
     fs.writeFile('data/'+roomcode+'.txt', JSON.stringify(roomdata), function (err) {
       if (err) throw err;
       console.log('Saved userinfo!');
@@ -82,8 +82,45 @@ app.get('/callbackg', function(req, res) {
   res.sendFile(__dirname+'/public/enter_roomcode.html');
 });
 
+app.get('/getlistnames', function(req, res) {
+  roomcode = req.query.roomcode;
+  fs.readFile('data/'+roomcode+'.txt', function(err, data) {
+    if (err) {
+      console.log(err);
+      res.end("");
+    } else {
+      roomuserdata = JSON.parse(data);
+      usernames = [];
+      for (username in roomuserdata.users) {
+        usernames.push(username);
+      }
+      out = usernames.join(', ');
+      res.end(out);
+    }
+  });
+});
+
 // app.get('/getgroupplaylist', function(req, res) {
+//   roomcode = req.query.roomcode;
+//   fs.readFile('data/'+roomcode+'.txt', function(err, data) {
+//     if (err) {
+//       console.log(err);
+//       res.end("_");
+//     } else {
+//       roomuserdata = JSON.parse(data);
+//       weightedtracks = {};
+//       for (username in roomuserdata.users) {
+//         weightedtracks[roomuserdata.users.username.]
+//       }
 //
+//       usernames = [];
+//       for (username in roomuserdata.users) {
+//         usernames.push(username);
+//       }
+//       out = usernames.join(', ');
+//       res.end(out);
+//     }
+//   });
 // });
 
 

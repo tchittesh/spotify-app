@@ -31,10 +31,34 @@ body {
   <br />
   <text id='text-box'>Safe to close tab now.</text>
   <br />
+  <br />
+  <text>People in this room:</text>
+  <br />
+  <text id='list-of-names'>host</text>
+  <br />
+  <br />
+  <text>Playlist:</text>
+  <br />
+  <text id='playlist'>_</text>
 </div>
 <script>
-var roomcode = window.location.hash;
-document.getElementById('text-box').innerHTML = "Your room code is "+roomcode.substring(1,);
+var roomcode = window.location.hash.substring(1,);
+document.getElementById('text-box').innerHTML = "Your room code is "+roomcode;
 </script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script>
+setInterval(function() {
+  $.get("/getlistnames", {roomcode : window.location.hash.substring(1,)}, function(data) {
+    document.getElementById('list-of-names').innerHTML = data;
+  });
+}, 1000);
+</script>
+<!-- <script>
+setInterval(function() {
+  $.get("/getlistnames", {roomcode : window.location.hash.substring(1,)}, function(data) {
+    document.getElementById('playlist').innerHTML = data;
+  });
+}, 5000);
+</script> -->
 </body>
 </html>
