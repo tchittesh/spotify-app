@@ -113,13 +113,14 @@ app.get('/getgroupplaylist', function(req, res) {
         for (var i = 0; i < 20; i++){
           //change line below (name -> uri) at end
           songuri = roomuserdata.users[username].items[i].uri;
-          console.log(songuri);
-          flag = 0;
+          songname = roomuserdata.users[username].items[i].name;
+          console.log(songname, 20-i);
+          flag = -1;
           for (var j = 0; j < weightedtracks.length; j++) {
             if (songuri == weightedtracks[j].uri) flag = j;
           }
-          if (flag == 0) {
-            weightedtracks.push({"uri" : songuri, "weight" : 20-i});
+          if (flag == -1) {
+            weightedtracks.push({"name": songname, "uri" : songuri, "weight" : 20-i});
           } else {
             weightedtracks[flag].weight+=(20-i);
           }
@@ -130,16 +131,18 @@ app.get('/getgroupplaylist', function(req, res) {
         return b.weight - a.weight;
       });
       console.log(weightedtracks);
-      tracksinorder=[];
+      tracknamesinorder=[];
+      trackurisinorder=[];
       for (var i = 0; i < weightedtracks.length; i++) {
-        tracksinorder.push(weightedtracks[i].uri);
+        tracknamesinorder.push(weightedtracks[i].name);
+        trackurisinorder.push(weightedtracks[i].uri);
       }
-      filecontents = {"playlist" : tracksinorder}
+      filecontents = {"namelist" : tracknamesinorder, "urilist" : trackurisinorder};
       fs.writeFile('data/'+roomcode+'playlist.txt', JSON.stringify(filecontents), function(err) {
         if (err) throw err;
         console.log('initialized data/'+roomcode+'playlist.txt');
       });
-      out = tracksinorder.join(", ");
+      out = tracknamesinorder.join(", ");
       res.end(out);
     }
   });
