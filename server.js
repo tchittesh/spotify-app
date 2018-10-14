@@ -3,10 +3,6 @@ var fs = require('fs');
 var path = require('path');
 var listofrooms;
 
-var client_id = 'c4afbd083ef34b34810c5b3c16a2e08d'; // Your client id
-// var client_secret = 'CLIENT_SECRET'; // Your secret
-var redirect_uri = 'http://localhost:8000/callback'; // Your redirect uri
-
 function getHashParams() {
   var hashParams = {};
   var e, r = /([^&;=]+)=?([^&;]*)/g,
@@ -53,29 +49,33 @@ app.get('/loggedinh', function(req, res) {
   });
 });
 
-// app.get('/loggeding', function(req, res) {
-//   userinfo = JSON.parse(req.query.userinfo);
-//   inputrc = req.query.rcode_input;
-//   fs.readFile('data/listofrooms.txt', function(err, data) {
-//     if (err) throw err;
-//     listofrooms = JSON.parse(data);
-//     if (!listofrooms.roomcodes.includes(inputrc)) res.sendFile(__dirname+'/public/enter_roomcode.html');
-//     fs.readFile('data/'+inputrc+'.txt', function(err, data1) {
-//       if (err) throw err;
-//       roomuserdata = JSON.parse(data1);
-//       roomuserdata.numusers++;
-//       temp = "user"+roomuserdata.numusers;
-//       roomuserdata.users.temp = userinfo;
-//       fs.writeFile('data/'+inputrc+'.txt', JSON.stringify(roomuserdata), function(err) {
-//         if (err) throw err;
-//         console.log('updated data/'+inputrc+'.txt');
-//       });
-//     });
-//   res.sendFile(__dirname+'/public/loggedin.html');
-// });
+app.get('/loggeding', function(req, res) {
+  userinfo = JSON.parse(req.query.userinfo);
+  inputrc = req.query.rcode_input;
+  fs.readFile('data/listofrooms.txt', function(err, data) {
+    if (err) throw err;
+    listofrooms = JSON.parse(data);
+    if (!listofrooms.roomcodes.includes(inputrc)) res.sendFile(__dirname+'/public/enter_roomcode.html');
+    fs.readFile('data/'+inputrc+'.txt', function(err, data1) {
+      if (err) throw err;
+      roomuserdata = JSON.parse(data1);
+      roomuserdata.numusers++;
+      temp = "user"+roomuserdata.numusers;
+      roomuserdata.users.temp = userinfo;
+      fs.writeFile('data/'+inputrc+'.txt', JSON.stringify(roomuserdata), function(err) {
+        if (err) throw err;
+        console.log('updated data/'+inputrc+'.txt');
+      });
+    });
+  res.sendFile(__dirname+'/public/loggedin.html');
+});
 
-app.get('/callback', function(req, res) {
-  res.sendFile(__dirname+'/public/use_access_token.html');
+app.get('/callbackh', function(req, res) {
+  res.sendFile(__dirname+'/public/enter_roomcode.html');
+});
+
+app.get('/callbackg', function(req, res) {
+  res.sendFile(__dirname+'/public/use_access_token_g.html');
 });
 
 
