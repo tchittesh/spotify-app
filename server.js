@@ -100,28 +100,50 @@ app.get('/getlistnames', function(req, res) {
   });
 });
 
-// app.get('/getgroupplaylist', function(req, res) {
-//   roomcode = req.query.roomcode;
-//   fs.readFile('data/'+roomcode+'.txt', function(err, data) {
-//     if (err) {
-//       console.log(err);
-//       res.end("_");
-//     } else {
-//       roomuserdata = JSON.parse(data);
-//       weightedtracks = {};
-//       for (username in roomuserdata.users) {
-//         weightedtracks[roomuserdata.users.username.]
-//       }
-//
-//       usernames = [];
-//       for (username in roomuserdata.users) {
-//         usernames.push(username);
-//       }
-//       out = usernames.join(', ');
-//       res.end(out);
-//     }
-//   });
-// });
+app.get('/getgroupplaylist', function(req, res) {
+  roomcode = req.query.roomcode;
+  fs.readFile('data/'+roomcode+'.txt', function(err, data) {
+    if (err) {
+      console.log(err);
+      res.end("_");
+    } else {
+      roomuserdata = JSON.parse(data);
+      weightedtracks = [];
+      for (username in roomuserdata.users) {
+        for (var i = 0; i < 20; i++){
+          //change line below (name -> uri) at end
+          songuri = roomuserdata.users[username].items[i].uri;
+          console.log(songuri);
+          flag = 0;
+          for (var j = 0; j < weightedtracks.length; j++) {
+            if (songuri == weightedtracks[j].uri) flag = j;
+          }
+          if (flag == 0) {
+            weightedtracks.push({"uri" : songuri, "weight" : 20-i});
+          } else {
+            weightedtracks[flag].weight+=(20-i);
+          }
+        }
+      }
+      console.log(weightedtracks);
+      weightedtracks.sort(function(a, b) {
+        return b.weight - a.weight;
+      });
+      console.log(weightedtracks);
+      tracksinorder=[];
+      for (var i = 0; i < weightedtracks.length; i++) {
+        tracksinorder.push(weightedtracks[i].uri);
+      }
+      filecontents = {"playlist" : tracksinorder}
+      fs.writeFile('data/'+roomcode+'playlist.txt', JSON.stringify(filecontents), function(err) {
+        if (err) throw err;
+        console.log('initialized data/'+roomcode+'playlist.txt');
+      });
+      out = tracksinorder.join(", ");
+      res.end(out);
+    }
+  });
+});
 
 
 

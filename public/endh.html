@@ -40,6 +40,9 @@ body {
   <text>Playlist:</text>
   <br />
   <text id='playlist'>_</text>
+  <br />
+  <br />
+  <a id='lock-button' class="btn btn-primary">Lock</a>
 </div>
 <script>
 var roomcode = window.location.hash.substring(1,);
@@ -60,5 +63,14 @@ setInterval(function() {
   });
 }, 5000);
 </script> -->
+<script>
+(function() {
+  document.getElementById('lock-button').addEventListener('click', function() {
+    $.get("/getgroupplaylist", {roomcode : window.location.hash.substring(1,)}, function(data) {
+      document.getElementById('playlist').innerHTML = data;
+    });
+  }, false);
+})();
+</script>
 </body>
 </html>
