@@ -31,7 +31,7 @@ body {
   <a id="login-host" class="btn btn-primary">Host a room</a>
   <br />
   <br />
-  <a href='/enter_roomcode.html' class="btn btn-primary">Join a room</a>
+  <a id="login-group" class="btn btn-primary">Join a room</a>
 </div>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
@@ -39,6 +39,19 @@ body {
     document.getElementById('login-host').addEventListener('click', function() {
       var client_id = 'c4afbd083ef34b34810c5b3c16a2e08d'; // Your client id
       var redirect_uri = 'http://localhost:8000/callbackh'; // Your redirect uri
+      var scope = 'user-read-private user-read-email user-top-read';
+      var url = 'https://accounts.spotify.com/authorize';
+      url += '?response_type=token';
+      url += '&client_id=' + encodeURIComponent(client_id);
+      url += '&scope=' + encodeURIComponent(scope);
+      url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+
+      window.location = url;
+    }, false);
+
+    document.getElementById('login-group').addEventListener('click', function() {
+      var client_id = 'c4afbd083ef34b34810c5b3c16a2e08d'; // Your client id
+      var redirect_uri = 'http://localhost:8000/callbackg'; // Your redirect uri
       var scope = 'user-read-private user-read-email user-top-read';
       var url = 'https://accounts.spotify.com/authorize';
       url += '?response_type=token';

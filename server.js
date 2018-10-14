@@ -52,31 +52,39 @@ app.get('/loggedinh', function(req, res) {
 app.get('/loggeding', function(req, res) {
   userinfo = JSON.parse(req.query.userinfo);
   inputrc = req.query.rcode_input;
+  username = req.query.username;
   fs.readFile('data/listofrooms.txt', function(err, data) {
     if (err) throw err;
     listofrooms = JSON.parse(data);
-    if (!listofrooms.roomcodes.includes(inputrc)) res.sendFile(__dirname+'/public/enter_roomcode.html');
-    fs.readFile('data/'+inputrc+'.txt', function(err, data1) {
-      if (err) throw err;
-      roomuserdata = JSON.parse(data1);
-      roomuserdata.numusers++;
-      temp = "user"+roomuserdata.numusers;
-      roomuserdata.users.temp = userinfo;
-      fs.writeFile('data/'+inputrc+'.txt', JSON.stringify(roomuserdata), function(err) {
+    if (!listofrooms.roomcodes.includes(inputrc)) {
+      res.end('false');
+    } else {
+      fs.readFile('data/'+inputrc+'.txt', function(err, data1) {
         if (err) throw err;
-        console.log('updated data/'+inputrc+'.txt');
+        roomuserdata = JSON.parse(data1);
+        roomuserdata.numusers++;
+        roomuserdata.users[username] = userinfo;
+        fs.writeFile('data/'+inputrc+'.txt', JSON.stringify(roomuserdata), function(err) {
+          if (err) throw err;
+          console.log('updated data/'+inputrc+'.txt');
+        });
       });
-    });
-  res.sendFile(__dirname+'/public/loggedin.html');
+      res.end('true');
+    }
+  });
 });
 
 app.get('/callbackh', function(req, res) {
-  res.sendFile(__dirname+'/public/enter_roomcode.html');
+  res.sendFile(__dirname+'/public/use_access_token_h.html');
 });
 
 app.get('/callbackg', function(req, res) {
-  res.sendFile(__dirname+'/public/use_access_token_g.html');
+  res.sendFile(__dirname+'/public/enter_roomcode.html');
 });
+
+// app.get('/getgroupplaylist', function(req, res) {
+//
+// });
 
 
 
