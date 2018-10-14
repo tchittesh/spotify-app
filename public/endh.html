@@ -43,8 +43,8 @@ body {
   <br />
   <br />
   <a id='lock-button' class="btn btn-primary">Lock</a>
-  <br />
-  <br />
+  <!-- <br /> -->
+  <!-- <br /> -->
   <!-- <iframe id='web-player' visibility='hidden' src="" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
 </div>
 <script>
@@ -56,6 +56,9 @@ document.getElementById('text-box').innerHTML = "Your room code is "+roomcode;
 setInterval(function() {
   $.get("/getlistnames", {roomcode : window.location.hash.substring(1,)}, function(data) {
     document.getElementById('list-of-names').innerHTML = data;
+  });
+  $.get("/getgroupplaylist", {roomcode : window.location.hash.substring(1,)}, function(data) {
+    document.getElementById('playlist').innerHTML = data;
   });
 }, 1000);
 </script>
@@ -72,6 +75,7 @@ setInterval(function() {
         // console.log(playlistcode);
         // console.log(document.getElementById('web-player').style);
         newsrc = 'https://open.spotify.com/embed/user/'+hostcode+'/playlist/'+playlistcode;
+        // window.open(newsrc);
         window.location.href = newsrc;
         // document.getElementById('web-player').src = newsrc;
         // document.getElementById('web-player').style.visibility = 'visible';
