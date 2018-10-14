@@ -2,63 +2,155 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-table{background-color:#87CEEB;}
-td,th{border:1px solid #aaa;text-align:left;padding:8px}
-td{background-color:#fff}
-th{background-color:#c4c4c4}
-html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
-body {
-    background-image: url("");
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic" rel="stylesheet">
+  <link rel="stylesheet" media="screen" href="https://static.codepen.io/assets/fullpage/fullpage-b3b9e9fa5ecfbc69f7d844752cbbf55af2babc6bca6c3d9b3ea1c85715ef7ff6.css">
+  <meta http-equiv=refresh content=90><style>
+  td,th{border:1px solid #aaa;text-align:left;padding:8px}
+  td{background-color:#fff}
+  th{background-color:#c4c4c4}
+  h1,h2,h3,h4,h5,h6 {color: white; font-family: 'Nanum Gothic';  font-style: normal;  font-weight: 400; font-size:100px;}
+  p{color: white; font-weight: bold;}
+  body {
+    background-image: url("main.jpg");
     background-repeat: no-repeat;
-    background-position: right top;
-    margin-right: 200px;
+    background-position: center;
     background-attachment: fixed;
-}
+    background-color: #373939;
+
+    background-size:cover;
+    /* bottom = footer height */
+
+  }
+  body {
+  }
+
+  .button {
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px 25px;
+    font-family: inherit;
+    cursor: pointer;
+    font-size: 15px;
+    color: #111;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 1);
+    background-color: #ccc;
+    background-clip: padding-box;
+    border: 1px solid;
+    border-color: #202020 #1a1a1a #111;
+    border-radius: 2px;
+    background-image: -webkit-linear-gradient(top, #efefef, #777);
+    background-image: -moz-linear-gradient(top, #efefef, #777);
+    background-image: -o-linear-gradient(top, #efefef, #777);
+    background-image: linear-gradient(to bottom, #efefef, #777);
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.09), 0 1px 1px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.09), 0px 1px 1px rgba(0, 0, 0, 0.2);
+  }
+  .button:hover {
+    background-color: #aaaaaa;
+    background-image: -webkit-linear-gradient(top, #ccc, #555);
+    background-image: -moz-linear-gradient(top, #ccc, #555);
+    background-image: -o-linear-gradient(top, #ccc, #555);
+    background-image: linear-gradient(to bottom, #ccc, #555);
+  }
+  .button:active, .button.active {
+    background-color: #b42f32;
+    border-color: #1c1c1c #202020 #222;
+    -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.09);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.09);
+  }
+
+  .rounded {border-radius:100em!important;}
+
+  .lightGrey {
+    color: #bbb;
+    text-shadow: 0 0 2px rgba(0, 0, 0, .7);
+    background-color: #303030;
+    border-color: #1c1c1c #202020 #222;
+    background-image: -webkit-linear-gradient(top, #8e8e8e, #434343);
+    background-image: -moz-linear-gradient(top, #8e8e8e, #434343);
+    background-image: -o-linear-gradient(top, #8e8e8e, #434343);
+    background-image: linear-gradient(to bottom, #8e8e8e, #434343);
+  }
+  .lightGrey:hover {
+    background-color: #313131;
+    background-image: -webkit-linear-gradient(top, #7b7b7b, #2a2a2a);
+    background-image: -moz-linear-gradient(top, #7b7b7b, #2a2a2a);
+    background-image: -o-linear-gradient(top, #7b7b7b, #2a2a2a);
+    background-image: linear-gradient(to bottom, #7b7b7b, #2a2a2a);
+  }
+
+  .darkGrey {
+    color: #bbb;
+    text-shadow: 0 0 2px rgba(0, 0, 0, .7);
+    background-color: #474747;
+    border-color: #1c1c1c #202020 #222;
+    background-image: -webkit-linear-gradient(top, #2a2a2a, #1b1b1b);
+    background-image: -moz-linear-gradient(top, #2a2a2a, #1b1b1b);
+    background-image: -o-linear-gradient(top, #2a2a2a, #1b1b1b);
+    background-image: linear-gradient(to bottom, #2a2a2a, #1b1b1b);
+  }
+  .darkGrey:hover {
+    background-color: #363636;
+    background-image: -webkit-linear-gradient(top, #404040, #2a2a2a);
+    background-image: -moz-linear-gradient(top, #404040, #2a2a2a);
+    background-image: -o-linear-gradient(top, #404040, #2a2a2a);
+    background-image: linear-gradient(to bottom, #404040, #2a2a2a);
+  }
+  #bar{background-image: repeating-linear-gradient(black, dimgrey 10%, grey 20%);}
+  #invisible{border: 1px solid transparent; background-color: rgba(0, 0, 0, 0.0);}
+  html {
+    position: relative;
+    min-height: 100%;
+  }
+  footer {
+    background-color: orange;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
+    overflow: hidden;
+  }
 </style>
 </head>
-<body class="w3-light-grey">
-    <header class="w3-container w3-light-blue w3-center w3-margin-top w3-card">
-  <h2><font style="font:115%/1.3 Arial,Helvetica,sans-serif"> Joined group successfully. </font></h2>
-</header>
-<div align=CENTER>
-  <br />
+<body>
+  <div class="w3-transparent" style="margin: 0 0 340px"></div>
+  <header align="center"><a href="/"><h1>Taste.blend()</h1></a></header>
+  <div align="center" style="height: 190px; background-color: rgba(255,255,255,.4)">
   <text id='text-box'>Safe to close tab now.</text>
-  <br />
-  <br />
-  <text>People in this room:</text>
-  <br />
+</br>
   <text id='list-of-names'>host</text>
-  <br />
-  <br />
+</br>
+</br>
   <text>Playlist:</text>
-  <br />
   <text id='playlist'>_</text>
-  <br />
-  <br />
-  <a id='lock-button' class="btn btn-primary">Lock</a>
-  <!-- <br /> -->
-  <!-- <br /> -->
-  <!-- <iframe id='web-player' visibility='hidden' src="" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
-</div>
+</br>
+</br>
+  <a id='lock-button' class="button rounded">Lock</a>
+  </div>
+  <br>
+  <footer class="w3-container w3-transparent w3-center w3-margin-top">
+    <p>Made with <a href="https://developer.spotify.com/" target="_blank">Spotify API</a></p>
+  </footer>
 <script>
 var roomcode = window.location.hash.substring(1,);
-document.getElementById('text-box').innerHTML = "Your room code is "+roomcode;
+document.getElementById('text-box').innerHTML = "Your room code is "+roomcode+'.';
 </script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
 setInterval(function() {
   $.get("/getlistnames", {roomcode : window.location.hash.substring(1,)}, function(data) {
-    document.getElementById('list-of-names').innerHTML = data;
+    document.getElementById('list-of-names').innerHTML = 'People in this room: '+data;
   });
   $.get("/getgroupplaylist", {roomcode : window.location.hash.substring(1,)}, function(data) {
-    document.getElementById('playlist').innerHTML = data;
+    document.getElementById('playlist').innerHTML = data.substring(0,Math.min(data.length, 300))+'...';
   });
 }, 1000);
 </script>
