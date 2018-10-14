@@ -1,6 +1,7 @@
 var express = require('express'); // Express web server framework
 var fs = require('fs');
 var path = require('path');
+var axios = require('axios');
 var listofrooms;
 
 function getHashParams() {
@@ -22,6 +23,7 @@ app.use(express.static(__dirname+'/public'));
 app.get('/loggedinh', function(req, res) {
   userinfo = JSON.parse(req.query.userinfo);
   var roomcode = "";
+  var access_token = req.query.accesstoken
   fs.readFile('data/listofrooms.txt', function(err, data) {
     if (err) throw err;
     listofrooms = JSON.parse(data);
@@ -36,7 +38,7 @@ app.get('/loggedinh', function(req, res) {
     // console.log(userinfo);
     // console.log(JSON.stringify(listofrooms));
     // tag = "user1"+req.query.type;
-    roomdata = {"numusers": 1, "users": {"host": userinfo}}
+    roomdata = {"numusers": 1, "users": {"host": userinfo}, "hostaccesstoken": access_token}
     fs.writeFile('data/'+roomcode+'.txt', JSON.stringify(roomdata), function (err) {
       if (err) throw err;
       console.log('Saved userinfo!');
@@ -108,9 +110,16 @@ app.get('/getgroupplaylist', function(req, res) {
       res.end("_");
     } else {
       roomuserdata = JSON.parse(data);
+      var playlistcode = roomuserdata.playlistcode;
+      var access_token = roomuserdata.hostaccesstoken;
       weightedtracks = [];
       for (username in roomuserdata.users) {
-        for (var i = 0; i < 20; i++){
+        try {
+          templength = roomuserdata.users[username].items.length;
+        } catch(e) {
+          templength = 0;
+        }
+        for (var i = 0; i < templength; i++){
           songuri = roomuserdata.users[username].items[i].uri;
           songname = roomuserdata.users[username].items[i].name;
           // console.log(songname, 20-i);
@@ -125,11 +134,11 @@ app.get('/getgroupplaylist', function(req, res) {
           }
         }
       }
-      // console.log(weightedtracks); unsorted
+      // console.log(weightedtracks);
       weightedtracks.sort(function(a, b) {
         return b.weight - a.weight;
       });
-      // console.log(weightedtracks); sorted
+      // console.log(weightedtracks);
       tracknamesinorder=[];
       trackurisinorder=[];
       for (var i = 0; i < weightedtracks.length; i++) {
@@ -141,9 +150,75 @@ app.get('/getgroupplaylist', function(req, res) {
         if (err) throw err;
         console.log('initialized data/'+roomcode+'playlist.txt');
       });
-      out = tracknamesinorder.join(", ");
-      res.end(out);
+
+      axios({
+        method: 'put',
+        url: 'https://api.spotify.com/v1/playlists/'+playlistcode+'/tracks',
+        data: {uris: trackurisinorder},
+        dataType: 'json',
+        headers: {
+          'Authorization': 'Bearer ' + access_token,
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        console.log('Track addition success');
+        out = tracknamesinorder.join(", ");
+        res.end(out);
+      }).catch(function (error) {
+        console.log(error);
+        out = tracknamesinorder.join(", ");
+        res.end(out);
+      });
     }
+  });
+});
+
+app.get('/updatehostcode', function(req, res) {
+  var data = JSON.parse(req.query.userinfo);
+  var roomcode = req.query.roomcode;
+  fs.readFile('data/'+roomcode+'.txt', function(err, data1) {
+    if (err) throw err;
+    roomdata = JSON.parse(data1);
+    hostcode = data.id;
+    roomdata["hostcode"] = hostcode;
+    fs.writeFile('data/'+roomcode+'.txt', JSON.stringify(roomdata), function(err) {
+      if (err) throw err;
+      // console.log(hostcode);
+      res.end(hostcode);
+    })
+  });
+});
+
+app.get('/updateplaylistcode', function(req, res) {
+  var data = JSON.parse(req.query.userinfo);
+  // console.log(data);
+  var roomcode = req.query.roomcode;
+  fs.readFile('data/'+roomcode+'.txt', function(err, data1) {
+    if (err) throw err;
+    roomdata = JSON.parse(data1);
+    var playlistcode
+    var createdlist = 'new_playlist';
+    for (var i = 0; i < data.items.length; i++) {
+      if (data.items[i].name == createdlist) {
+        playlistcode = data.items[i].id;
+      }
+    }
+    roomdata["playlistcode"] = playlistcode;
+    fs.writeFile('data/'+roomcode+'.txt', JSON.stringify(roomdata), function(err) {
+      if (err) throw err;
+      // console.log(playlistcode);
+      res.end(playlistcode);
+    })
+  });
+});
+
+app.get('/gethostplaylistcode', function(req, res) {
+  var roomcode = req.query.roomcode;
+  fs.readFile('data/'+roomcode+'.txt', function(err, data) {
+    if (err) throw err;
+    info = JSON.parse(data);
+    out = JSON.stringify({"hostcode" : info.hostcode, "playlistcode" : info.playlistcode});
+    res.end(out);
   });
 });
 

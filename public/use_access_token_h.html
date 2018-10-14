@@ -31,11 +31,40 @@
           'Authorization': 'Bearer ' + access_token
         },
         success: function(response) {
-          $.get("/loggedinh", {userinfo : JSON.stringify(response)}, function(data) {
-            window.location.href = 'endh.html#'+data;
-          } );
+          console.log(response);
+          $.get("/loggedinh", {accesstoken : access_token, userinfo : JSON.stringify(response)}, function(data) {
+            var roomcode = data;
+            console.log(roomcode);
+            // window.location.href = 'endh.html#'+data;
+            $.ajax({
+              url: 'https://api.spotify.com/v1/me',
+              headers: {
+                'Authorization': 'Bearer ' + access_token
+              },
+              success: function(response) {
+                console.log(response);
+                $.get("/updatehostcode", {"roomcode" : roomcode, "userinfo" : JSON.stringify(response)}, function(data1) {
+                  var hostcode = data1;
+                  console.log(hostcode);
+                  $.ajax({
+                    url: 'https://api.spotify.com/v1/users/'+hostcode+'/playlists',
+                    headers: {
+                      'Authorization': 'Bearer ' + access_token
+                    },
+                    success: function(response) {
+                      console.log(response);
+                      $.get("/updateplaylistcode", {"roomcode" : roomcode, userinfo : JSON.stringify(response)}, function(data2) {
+                        console.log(data2);
+                        window.location.href = 'endh.html#'+roomcode;
+                      } );
+                    }
+                  });
+                });
+              }
+            });
+          });
         }
-      })
+      });
     }
   })();
 </script>

@@ -43,6 +43,9 @@ body {
   <br />
   <br />
   <a id='lock-button' class="btn btn-primary">Lock</a>
+  <br />
+  <br />
+  <!-- <iframe id='web-player' visibility='hidden' src="" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
 </div>
 <script>
 var roomcode = window.location.hash.substring(1,);
@@ -60,7 +63,19 @@ setInterval(function() {
 (function() {
   document.getElementById('lock-button').addEventListener('click', function() {
     $.get("/getgroupplaylist", {roomcode : window.location.hash.substring(1,)}, function(data) {
+      // console.log(data);
       document.getElementById('playlist').innerHTML = data;
+      $.get("/gethostplaylistcode", {roomcode : window.location.hash.substring(1,)}, function(data1) {
+        hostcode = JSON.parse(data1).hostcode;
+        // console.log(hostcode);
+        playlistcode = JSON.parse(data1).playlistcode;
+        // console.log(playlistcode);
+        // console.log(document.getElementById('web-player').style);
+        newsrc = 'https://open.spotify.com/embed/user/'+hostcode+'/playlist/'+playlistcode;
+        window.location.href = newsrc;
+        // document.getElementById('web-player').src = newsrc;
+        // document.getElementById('web-player').style.visibility = 'visible';
+      });
     });
   }, false);
 })();
