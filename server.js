@@ -33,8 +33,8 @@ app.get('/loggedinh', function(req, res) {
       }
     }
     listofrooms.roomcodes.push(roomcode);
-    console.log(userinfo);
-    console.log(JSON.stringify(listofrooms));
+    // console.log(userinfo);
+    // console.log(JSON.stringify(listofrooms));
     // tag = "user1"+req.query.type;
     roomdata = {"numusers": 1, "users": {"host": userinfo}}
     fs.writeFile('data/'+roomcode+'.txt', JSON.stringify(roomdata), function (err) {
@@ -111,10 +111,9 @@ app.get('/getgroupplaylist', function(req, res) {
       weightedtracks = [];
       for (username in roomuserdata.users) {
         for (var i = 0; i < 20; i++){
-          //change line below (name -> uri) at end
           songuri = roomuserdata.users[username].items[i].uri;
           songname = roomuserdata.users[username].items[i].name;
-          console.log(songname, 20-i);
+          // console.log(songname, 20-i);
           flag = -1;
           for (var j = 0; j < weightedtracks.length; j++) {
             if (songuri == weightedtracks[j].uri) flag = j;
@@ -126,11 +125,11 @@ app.get('/getgroupplaylist', function(req, res) {
           }
         }
       }
-      console.log(weightedtracks);
+      // console.log(weightedtracks); unsorted
       weightedtracks.sort(function(a, b) {
         return b.weight - a.weight;
       });
-      console.log(weightedtracks);
+      // console.log(weightedtracks); sorted
       tracknamesinorder=[];
       trackurisinorder=[];
       for (var i = 0; i < weightedtracks.length; i++) {
