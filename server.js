@@ -237,5 +237,5 @@ fs.writeFile('data/listofrooms.txt', JSON.stringify(listofrooms), function (err)
   console.log('initialized data/listofrooms.txt!');
 });
 // console.log('Listening on 8000');
-// app.listen(8000);
-app.listen(3000, '0.0.0.0');
+app.listen(8000);
+// app.listen(3000, '0.0.0.0');
